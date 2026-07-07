@@ -14,13 +14,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Занятий меіл")
+            raise serializers.ValidationError("mail taken")
         return value
 
     def validate(self, data):
 
         if data['password'] != data['password2']:
-            raise serializers.ValidationError({"password": "Різні паролі"})
+            raise serializers.ValidationError({"password": "passwords differ"})
         return data
 
     def create(self, validated_data):
