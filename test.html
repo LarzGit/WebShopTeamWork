@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Тест API</title>
+
+</head>
+
+<body>
+
+    <h2>Реєстрація</h2>
+    <input id="reg-username" placeholder="Username">
+    <input id="reg-email" placeholder="Email">
+    <input id="reg-password" type="password" placeholder="Password">
+    <button onclick="register()">register</button>
+
+    <h2>Вхід</h2>
+    <input id="login-username" placeholder="Username">
+    <input id="login-password" type="password" placeholder="Password">
+    <button onclick="login()">enter</button>
+
+    <h3>Результат:</h3>
+    <pre id="output">server answer</pre>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000/api/auth";
+
+        async function register() {
+            const data = {
+                username: document.getElementById('reg-username').value,
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-password').value,
+            };
+
+            const response = await fetch(`${API_URL}/register/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            document.getElementById('output').textContent =
+                `Статус: ${response.status}\n` + JSON.stringify(result, null, 2);
+        }
+
+        async function login() {
+            const data = {
+                username: document.getElementById('login-username').value,
+                password: document.getElementById('login-password').value,
+            };
+
+            const response = await fetch(`${API_URL}/login/`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            document.getElementById('output').textContent =
+                `Статус: ${response.status}\n` + JSON.stringify(result, null, 2);
+        }
+    </script>
+
+</body>
+
+</html>
