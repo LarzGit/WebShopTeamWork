@@ -1,5 +1,8 @@
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
+
+from catalog.models import Product
 
 
 class Order(models.Model):
@@ -33,3 +36,52 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Order #{self.id} ({self.user})'
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items', verbose_name="замовлення")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name="товар")
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)], verbose_name="кількість")
+    price_at_purchase = models.DecimalField(
+        max_digits=10, decimal_places=2, verbose_name="ціна на момент купівлі"
+    )
+
+    @property
+    def subtotal(self):
+        return self.price_at_purchase * self.quantity
+
+    def __str__(self):
+        return f'{self.product} x{self.quantity} ({self.order})'
+
+
+class Cart(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='cart',
+        verbose_name="користувач"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Кошик {self.user}'
+
+    @property
+    def total_amount(self):
+        return sum(item.subtotal for item in self.items.all())
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items', verbose_name="кошик")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="товар")
+    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], verbose_name="кількість")
+
+    class Meta:
+        unique_together = ('cart', 'product')
+
+    @property
+    def subtotal(self):
+        return self.product.price * self.quantity
+
+    def __str__(self):
+        return f'{self.product.name} x{self.quantity}'
