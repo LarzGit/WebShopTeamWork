@@ -1,0 +1,36 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+{% include 'shop/includes/category_menu.html' %}
+
+<section class="catalog-section">
+    <div class="container">
+        <div class="section-heading">
+            <h2>All <span>Products</span></h2>
+        </div>
+
+        <div class="products-grid">
+            {% for product in products %}
+            <article class="product-card">
+                <div class="discount-badge">{{ product.discount|linebreaksbr }}</div>
+
+                <div class="product-image">
+                    <img src="{% static product.image %}" alt="{{ product.name }}">
+                </div>
+
+                <div class="product-info">
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">{{ product.price }} <span>{{ product.old_price }}</span></p>
+                    <p class="save">Save - {{ product.save }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% include 'shop/includes/footer.html' %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% load static %}
+<section class="brands-section">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Top <span>Electronics Brands</span></h2>
+            <a href="#">View All ›</a>
+        </div>
+
+        <div class="brands-grid">
+            {% for brand in brands %}
+            <div class="brand-card">
+                <img src="{% static brand.image %}" alt="{{ brand.name }}">
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="brand-dots">
+            <span class="active"></span><span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+</section>
