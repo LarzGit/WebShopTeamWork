@@ -1,0 +1,34 @@
+{% load static %}
+
+<article class="product-card {% if product.active %}active{% endif %}">
+    <div class="discount-badge">
+        {{ product.discount|linebreaksbr }}
+    </div>
+
+    <div class="product-image">
+        {% if product.image %}
+        <img class="img-fluid" src="{% static product.image %}" alt="{{ product.name }}">
+        {% else %}
+        <div class="no-image">No image</div>
+        {% endif %}
+    </div>
+
+    <div class="product-info">
+        <h3>{{ product.name }}</h3>
+
+        <p class="price">
+            {{ product.price }}
+            {% if product.old_price %}
+            <span>{{ product.old_price }}</span>
+            {% endif %}
+        </p>
+
+        <p class="save">
+            {% if product.save %}
+            Save - {{ product.save }}
+            {% else %}
+            In stock
+            {% endif %}
+        </p>
+    </div>
+</article>

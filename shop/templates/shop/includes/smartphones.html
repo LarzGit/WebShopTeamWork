@@ -1,25 +1,20 @@
-{% load static %}
 <section class="products-section">
     <div class="container">
         <div class="section-heading">
             <h2>Grab the best deal on <span>Smartphones</span></h2>
-            <a href="#">View All ›</a>
+            <a href="{% url 'catalog' %}">View All ›</a>
         </div>
 
+        {% if products %}
         <div class="products-grid">
             {% for product in products %}
-            <article class="product-card {% if forloop.counter == 2 %}active{% endif %}">
-                <div class="discount-badge">{{ product.discount|linebreaksbr }}</div>
-                <div class="product-image">
-                    <img src="{% static product.image %}" alt="{{ product.name }}">
-                </div>
-                <div class="product-info">
-                    <h3>{{ product.name }}</h3>
-                    <p class="price">{{ product.price }} <span>{{ product.old_price }}</span></p>
-                    <p class="save">Save - {{ product.save }}</p>
-                </div>
-            </article>
+            {% include 'shop/includes/product_card.html' %}
             {% endfor %}
         </div>
+        {% else %}
+        <div class="empty-products">
+            Products are not available yet.
+        </div>
+        {% endif %}
     </div>
 </section>

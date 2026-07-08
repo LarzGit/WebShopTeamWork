@@ -1,5 +1,7 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+{% block title %}MegaMart — Catalog{% endblock %}
+{% block description %}Browse MegaMart products, smartphones, electronics and daily essentials.{% endblock %}
 
 {% block content %}
 {% include 'shop/includes/topbar.html' %}
@@ -12,23 +14,17 @@
             <h2>All <span>Products</span></h2>
         </div>
 
+        {% if products %}
         <div class="products-grid">
             {% for product in products %}
-            <article class="product-card">
-                <div class="discount-badge">{{ product.discount|linebreaksbr }}</div>
-
-                <div class="product-image">
-                    <img src="{% static product.image %}" alt="{{ product.name }}">
-                </div>
-
-                <div class="product-info">
-                    <h3>{{ product.name }}</h3>
-                    <p class="price">{{ product.price }} <span>{{ product.old_price }}</span></p>
-                    <p class="save">Save - {{ product.save }}</p>
-                </div>
-            </article>
+            {% include 'shop/includes/product_card.html' %}
             {% endfor %}
         </div>
+        {% else %}
+        <div class="empty-products">
+            Products are not available yet.
+        </div>
+        {% endif %}
     </div>
 </section>
 
