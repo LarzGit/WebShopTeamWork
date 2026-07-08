@@ -91,3 +91,9 @@ def catalog(request):
     return render(request, "shop/catalog.html", {
         "products": PRODUCTS,
     })
+def register(request):
+    return render(request, "shop/register.html")
+
+
+def login_view(request):
+    return render(request, "shop/login.html")

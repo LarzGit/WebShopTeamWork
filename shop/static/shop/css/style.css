@@ -1,5 +1,3 @@
-
-
 :root {
     --primary: #008ecc;
     --primary-light: #f3fbff;
@@ -59,6 +57,10 @@ body {
 
 /* NAVBAR */
 
+.nav-actions a:hover {
+    color: #0d9eea;
+}
+
 .navbar-section {
     padding: 22px 0;
     border-bottom: 1px solid #eee;
@@ -98,17 +100,23 @@ body {
 
 .nav-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 20px;
+    justify-content: center;
+    gap: 18px;
 }
 
 .nav-actions a {
-    color: #333;
+    color: #222;
     text-decoration: none;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: .3s;
 }
 
 .divider {
     width: 1px;
+    height: 24px;
     background: #ddd;
 }
 
@@ -843,4 +851,110 @@ body {
     color: #666;
     text-align: center;
     font-size: 18px;
+}
+
+/* ================= AUTH PAGES ================= */
+
+.auth-section {
+    padding: 70px 0;
+    background: #f8fbfd;
+}
+
+.auth-card {
+    max-width: 480px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 18px;
+    padding: 36px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+}
+
+.auth-card h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+}
+
+.auth-subtitle {
+    color: var(--muted);
+    margin-bottom: 28px;
+}
+
+.auth-card .form-label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.auth-card .form-control {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.auth-card .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 .2rem rgba(0, 142, 204, .15);
+}
+
+.auth-btn {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.auth-btn:hover {
+    background: #0078ad;
+    transform: translateY(-2px);
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 22px;
+    margin-bottom: 0;
+    color: var(--muted);
+}
+
+.auth-switch a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+    .auth-section {
+        padding: 40px 0;
+    }
+
+    .auth-card {
+        padding: 25px 20px;
+    }
+
+    .auth-card h1 {
+        font-size: 26px;
+    }
+}
+
+.invalid-feedback {
+    display: none;
+    font-size: 13px;
+    color: #dc3545;
+    margin-top: 6px;
+}
+
+.form-control.is-invalid+.invalid-feedback {
+    display: block;
+}
+
+.alert {
+    margin-bottom: 20px;
 }

@@ -1,16 +1,18 @@
 {% extends 'shop/base.html' %}
+
 {% block title %}MegaMart — Home{% endblock %}
-{% block description %}MegaMart homepage with best deals, electronics brands, top categories and daily essentials.{%
-endblock %}
+{% block description %}MegaMart homepage with best deals, electronics brands, top categories and daily essentials.{%endblock %}
 
 {% block content %}
-  {% include 'shop/includes/topbar.html' %}
-  {% include 'shop/includes/navbar.html' %}
-  {% include 'shop/includes/category_menu.html' %}
-  {% include 'shop/includes/hero.html' %}
-  {% include 'shop/includes/smartphones.html' %}
-  {% include 'shop/includes/categories.html' %}
-  {% include 'shop/includes/brands.html' %}
-  {% include 'shop/includes/essentials.html' %}
-  {% include 'shop/includes/footer.html' %}
+
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+{% include 'shop/includes/category_menu.html' %}
+{% include 'shop/includes/hero.html' %}
+{% include 'shop/includes/smartphones.html' %}
+{% include 'shop/includes/categories.html' %}
+{% include 'shop/includes/brands.html' %}
+{% include 'shop/includes/essentials.html' %}
+{% include 'shop/includes/footer.html' %}
+
 {% endblock %}
