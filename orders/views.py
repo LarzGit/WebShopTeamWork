@@ -79,7 +79,7 @@ class OrderCreateView(APIView):
             order.total_amount = total
             order.save()
 
-            cart_items.delete()  # очищаємо кошик після оформлення
+            cart_items.delete()  
 
         return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
 
