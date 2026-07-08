@@ -2,7 +2,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'gs(2%a+6_w#4stf&%z$j_5xwl5bu05eq=mdh1*=n%or0@7h4qz'  
+SECRET_KEY = 'gs(2%a+6_w#4stf&%z$j_5xwl5bu05eq=mdh1*=n%or0@7h4qz'
 
 DEBUG = True
 
@@ -16,8 +16,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'rest_framework',        
-    'accounts',               
+    'rest_framework',
+    'accounts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        'accounts.authentication.CsrfExemptSessionAuthentication',
     ),
 }
 
