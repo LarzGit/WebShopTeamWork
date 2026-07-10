@@ -4,10 +4,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Order, OrderItem, Cart, CartItem
 from .serializers import OrderSerializer, CartSerializer
+from django.shortcuts import get_object_or_404
+from catalog.models import Product
+from accounts.permissions import IsAdminRole
 
 
 class CartView(APIView):
-    """Показати кошик поточного користувача"""
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -16,27 +18,43 @@ class CartView(APIView):
 
 
 class CartItemAddView(APIView):
-    """Додати товар у кошик (або збільшити кількість, якщо вже є)"""
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         product_id = request.data.get('product')
-        quantity = int(request.data.get('quantity', 1))
+        quantity = request.data.get('quantity', 1)
+
+        try:
+            quantity = int(quantity)
+        except (ValueError, TypeError):
+            return Response({"detail": "quantity повинно бути числом"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if quantity < 1:
+            return Response({"detail": "Кількість повинна бути більше 0"}, status=status.HTTP_400_BAD_REQUEST)
+
+        product = get_object_or_404(Product, id=product_id)
 
         cart, _ = Cart.objects.get_or_create(user=request.user)
         item, created = CartItem.objects.get_or_create(
-            cart=cart, product_id=product_id,
-            defaults={'quantity': quantity}
+            cart=cart, product=product,
+            defaults={'quantity': 0}   
         )
-        if not created:
-            item.quantity += quantity
-            item.save()
+
+        new_quantity = item.quantity + quantity if not created else quantity
+
+        if new_quantity > product.stock:
+            return Response(
+                {"detail": f"Недостатньо товару на складі. Доступно: {product.stock}, у кошику вже: {item.quantity if not created else 0}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        item.quantity = new_quantity
+        item.save()
 
         return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
 
 
 class CartItemRemoveView(APIView):
-    """Видалити позицію з кошика"""
     permission_classes = [permissions.IsAuthenticated]
 
     def delete(self, request, item_id):
@@ -46,7 +64,6 @@ class CartItemRemoveView(APIView):
 
 
 class OrderCreateView(APIView):
-    """Оформити замовлення на основі поточного кошика"""
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -104,3 +121,55 @@ class OrderDetailView(generics.RetrieveAPIView):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
     
+
+class CartItemUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, item_id):
+        quantity = request.data.get('quantity')
+
+        if quantity is None:
+            return Response({"detail": "Поле quantity обов'язкове"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            quantity = int(quantity)
+        except (ValueError, TypeError):
+            return Response({"detail": "quantity повинно бути числом"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if quantity < 1:
+            return Response({"detail": "Кількість повинна бути більше 0"}, status=status.HTTP_400_BAD_REQUEST)
+
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        item = get_object_or_404(CartItem, cart=cart, id=item_id)
+
+        if quantity > item.product.stock:
+            return Response(
+                {"detail": f"Недостатньо товару на складі. Доступно: {item.product.stock}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        item.quantity = quantity
+        item.save()
+
+        return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
+    
+
+
+class OrderStatusUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsAdminRole]
+
+    def patch(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        new_status = request.data.get('status')
+
+        valid_statuses = [choice[0] for choice in Order.Status.choices]
+        if new_status not in valid_statuses:
+            return Response(
+                {"detail": f"Невірний статус. Дозволені: {valid_statuses}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        order.status = new_status
+        order.save()
+
+        return Response(OrderSerializer(order).data, status=status.HTTP_200_OK)

@@ -89,6 +89,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'accounts.authentication.CsrfExemptSessionAuthentication',
     ),
+    'DEFAULT_PAGINATION_CLASS': 'catalog.pagination.CustomPageNumberPagination',
+    'PAGE_SIZE': 12,
 }
 
 CORS_ALLOWED_ORIGINS = [

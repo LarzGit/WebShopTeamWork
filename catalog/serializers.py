@@ -14,3 +14,12 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'price', 'category', 'stock', 'image', 'avg_rating']
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user_username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Review
+        fields = ['id', 'product', 'user', 'user_username', 'rating', 'comment', 'created_at']
+        read_only_fields = ['user', 'created_at']
