@@ -1,0 +1,61 @@
+{% extends 'shop/base.html' %}
+{% block title %}Кошик — MegaMart{% endblock %}
+
+{% block content %}
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+
+<section class="catalog-section">
+    <div class="container">
+        <h1>Кошик</h1>
+
+        {% if items %}
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Ціна</th>
+                    <th>Кількість</th>
+                    <th>Сума</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        <a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a>
+                    </td>
+                    <td>{{ item.product.price }} ₴</td>
+                    <td style="max-width:160px">
+                        <form method="post" action="{% url 'cart_update' item.id %}" class="d-flex gap-2">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
+                                max="{{ item.product.stock }}" class="form-control">
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">✓</button>
+                        </form>
+                    </td>
+                    <td>{{ item.subtotal }} ₴</td>
+                    <td>
+                        <form method="post" action="{% url 'cart_remove' item.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Видалити</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <h4 class="mb-0">Разом: {{ cart.total_amount }} ₴</h4>
+            <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg">Оформити замовлення</a>
+        </div>
+        {% else %}
+        <p>Ваш кошик порожній. <a href="{% url 'catalog' %}">Перейти до каталогу</a></p>
+        {% endif %}
+    </div>
+</section>
+
+{% include 'shop/includes/footer.html' %}
+{% endblock %}

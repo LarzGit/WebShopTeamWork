@@ -1,0 +1,59 @@
+{% load static %}
+
+<nav class="navbar-section">
+    <div class="container navbar-inner">
+
+        <a href="{% url 'home' %}" class="logo">
+            <span class="logo-icon">☰</span>
+            MegaMart
+        </a>
+
+        <form class="search-box" action="{% url 'catalog' %}" method="get">
+            <i class="bi bi-search"></i>
+            <input type="text" name="q" value="{{ query|default:'' }}" placeholder="Пошук товарів...">
+        </form>
+
+        <div class="nav-actions">
+            {% if user.is_authenticated %}
+            <a href="{% url 'shop_logout' %}" class="nav-action-link">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Вийти ({{ user.username }})</span>
+            </a>
+            {% else %}
+            <a href="{% url 'shop_register' %}" class="nav-action-link">
+                <i class="bi bi-person-plus"></i>
+                <span>Реєстрація</span>
+            </a>
+
+            <span class="divider"></span>
+
+            <a href="{% url 'shop_login' %}" class="nav-action-link">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <span>Увійти</span>
+            </a>
+            {% endif %}
+
+            <span class="divider"></span>
+
+            <a href="{% url 'profile' %}" class="nav-action-link">
+                <i class="bi bi-person"></i>
+                <span>Профіль</span>
+            </a>
+
+            <span class="divider"></span>
+
+            <a href="{% url 'order_history' %}" class="nav-action-link">
+                <i class="bi bi-receipt"></i>
+                <span>Замовлення</span>
+            </a>
+
+            <span class="divider"></span>
+
+            <a href="{% url 'cart' %}" class="nav-action-link">
+                <i class="bi bi-cart3"></i>
+                <span>Кошик{% if cart_count %} ({{ cart_count }}){% endif %}</span>
+            </a>
+        </div>
+
+    </div>
+</nav>

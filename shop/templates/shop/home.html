@@ -1,0 +1,19 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}MegaMart — Головна{% endblock %}
+{% block description %}Головна сторінка MegaMart: найкращі пропозиції, бренди електроніки, популярні категорії та товари
+на щодень.{% endblock %}
+
+{% block content %}
+
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+{% include 'shop/includes/category_menu.html' %}
+{% include 'shop/includes/hero.html' %}
+{% include 'shop/includes/smartphones.html' %}
+{% include 'shop/includes/categories.html' %}
+{% include 'shop/includes/brands.html' %}
+{% include 'shop/includes/essentials.html' %}
+{% include 'shop/includes/footer.html' %}
+
+{% endblock %}

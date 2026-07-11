@@ -1,0 +1,21 @@
+{% load static %}
+<section class="essentials-section">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Товари <span>на щодень</span></h2>
+            <a href="{% url 'catalog' %}">Всі товари ›</a>
+        </div>
+
+        <div class="essentials-grid">
+            {% for item in essentials %}
+            <div class="essential-card {% if item.active %}active{% endif %}">
+                <div class="essential-img">
+                    <img src="{% static item.image %}" alt="{{ item.name }}">
+                </div>
+                <p>{{ item.name }}</p>
+                <h4>Знижки до 50%</h4>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

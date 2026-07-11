@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Замовлення оформлено — MegaMart{% endblock %}
+
+{% block content %}
+
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+{% include 'shop/includes/category_menu.html' %}
+
+<section class="catalog-section">
+    <div class="container text-center">
+
+        <h1 class="mb-3">Дякуємо за замовлення!</h1>
+
+        <p class="mb-1">Ваше замовлення <strong>№{{ order.id }}</strong> успішно оформлено.</p>
+        <p class="mb-4">Сума замовлення: <strong>{{ order.total_amount|floatformat:2 }} ₴</strong></p>
+
+        <a href="{% url 'order_detail' order.id %}" class="btn btn-primary">Переглянути замовлення</a>
+        <a href="{% url 'catalog' %}" class="btn btn-outline-secondary">Продовжити покупки</a>
+
+    </div>
+</section>
+
+{% include 'shop/includes/footer.html' %}
+{% endblock %}

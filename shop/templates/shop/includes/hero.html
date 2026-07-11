@@ -1,0 +1,32 @@
+{% load static %}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-banner" id="heroBanner">
+            <button class="hero-arrow hero-arrow-left" type="button" aria-label="Попередній слайд">‹</button>
+
+            <div class="hero-track">
+                {% for slide in slides %}
+                <div class="hero-slide {% if forloop.first %}active{% endif %}">
+                    <div class="hero-content">
+                        <p>{{ slide.eyebrow }}</p>
+                        <h1>{{ slide.title }}</h1>
+                        <h4>{{ slide.subtitle }}</h4>
+                    </div>
+
+                    <div class="hero-watch-wrap">
+                        <img src="{% static slide.image %}" alt="{{ slide.title }}">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button class="hero-arrow hero-arrow-right" type="button" aria-label="Наступний слайд">›</button>
+
+            <div class="hero-dots">
+                {% for slide in slides %}
+                <span class="{% if forloop.first %}active{% endif %}"></span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>

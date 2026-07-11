@@ -1,0 +1,40 @@
+{% load static %}
+
+<article class="product-card">
+    <a href="{% url 'product_detail' product.id %}" class="product-image">
+        {% if product.image %}
+        <img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+        <div class="no-image">Без фото</div>
+        {% endif %}
+    </a>
+
+    <div class="product-info">
+        <h3><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+
+        <p class="price">{{ product.price }} ₴</p>
+
+        <p class="save">
+            {% if product.avg_rating %}
+            ★ {{ product.avg_rating|floatformat:1 }}
+            {% else %}
+            Ще немає відгуків
+            {% endif %}
+        </p>
+
+        {% if product.stock > 0 %}
+        <p class="text-success">У наявності: {{ product.stock }}</p>
+
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'cart_add' product.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <button class="btn btn-sm btn-primary" type="submit">У кошик</button>
+        </form>
+        {% endif %}
+
+        {% else %}
+        <p class="text-danger">Немає в наявності</p>
+        {% endif %}
+    </div>
+</article>

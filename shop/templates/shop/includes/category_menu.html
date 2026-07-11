@@ -1,0 +1,20 @@
+<section class="category-menu">
+    <div class="container">
+        <div class="category-menu-wrap">
+            <button type="button" class="category-scroll category-scroll-left" aria-label="Прокрутити ліворуч">‹</button>
+
+            <div class="category-list" id="categoryList">
+                <a href="{% url 'catalog' %}">
+                    <button type="button">Усі категорії</button>
+                </a>
+                {% for cat in nav_categories %}
+                <a href="{% url 'catalog' %}?category={{ cat.id }}">
+                    <button type="button">{{ cat.name }}</button>
+                </a>
+                {% endfor %}
+            </div>
+
+            <button type="button" class="category-scroll category-scroll-right" aria-label="Прокрутити праворуч">›</button>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,139 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}{{ product.name }} — MegaMart{% endblock %}
+{% block description %}{{ product.description|truncatewords:20 }}{% endblock %}
+
+{% block content %}
+
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+{% include 'shop/includes/category_menu.html' %}
+
+<section class="catalog-section">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-5">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+                {% else %}
+                <div class="no-image">Без фото</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-7">
+                <h1>{{ product.name }}</h1>
+
+                <p class="text-muted">
+                    Категорія: {{ product.category.name }}
+                </p>
+
+                <p>{{ product.description }}</p>
+
+                <h3 class="price">
+                    {{ product.price|floatformat:2 }} ₴
+                </h3>
+
+                <p>
+                    {% if product.avg_rating %}
+                    ★ {{ product.avg_rating|floatformat:1 }}
+                    {% else %}
+                    Ще немає відгуків
+                    {% endif %}
+                    ·
+                    {% if product.stock > 0 %}
+                    У наявності: {{ product.stock }} шт.
+                    {% else %}
+                    Немає в наявності
+                    {% endif %}
+                </p>
+
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'cart_add' product.id %}" class="d-flex gap-2 mt-3">
+
+                    {% csrf_token %}
+
+                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}"
+                        class="form-control" style="max-width:100px" {% if not product.stock %}disabled{% endif %}>
+
+                    <button type="submit" class="btn btn-primary" {% if not product.stock %}disabled{% endif %}>
+                        До кошика
+                    </button>
+
+                </form>
+                {% else %}
+                <a href="{% url 'shop_login' %}?next={{ request.path }}" class="btn btn-primary mt-3">
+                    Увійдіть, щоб купити
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <h3>Відгуки</h3>
+
+        {% for review in reviews %}
+        <div class="border-bottom py-3">
+            <strong>{{ review.user.username }}</strong>
+            — {{ review.rating }} ★
+
+            <span class="text-muted">
+                · {{ review.created_at|date:"d.m.Y" }}
+            </span>
+
+            <p class="mb-0">
+                {{ review.comment }}
+            </p>
+        </div>
+        {% empty %}
+        <p class="text-muted">
+            Відгуків ще немає. Будьте першим!
+        </p>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+
+        <form method="post" class="mt-4" style="max-width:500px">
+
+            {% csrf_token %}
+
+            <label class="form-label">
+                Ваша оцінка
+            </label>
+
+            <select name="rating" class="form-select mb-2" style="max-width:150px">
+
+                <option value="1">1 ★</option>
+                <option value="2">2 ★</option>
+                <option value="3">3 ★</option>
+                <option value="4">4 ★</option>
+                <option value="5" selected>5 ★</option>
+
+            </select>
+
+            <textarea name="comment" class="form-control mb-2" rows="3" placeholder="Ваш відгук про товар"
+                required></textarea>
+
+            <button class="btn btn-outline-primary" type="submit">
+                Залишити відгук
+            </button>
+
+        </form>
+
+        {% else %}
+
+        <p class="text-muted mt-3">
+            <a href="{% url 'shop_login' %}?next={{ request.path }}">
+                Увійдіть
+            </a>, щоб залишити відгук.
+        </p>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% include 'shop/includes/footer.html' %}
+
+{% endblock %}

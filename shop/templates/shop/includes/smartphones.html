@@ -1,0 +1,20 @@
+<section class="products-section">
+    <div class="container">
+        <div class="section-heading">
+            <h2>Найкращі пропозиції на <span>смартфони</span></h2>
+            <a href="{% url 'catalog' %}">Всі товари ›</a>
+        </div>
+
+        {% if products %}
+        <div class="products-grid">
+            {% for product in products %}
+            {% include 'shop/includes/product_card.html' %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-products">
+            Товарів поки немає.
+        </div>
+        {% endif %}
+    </div>
+</section>

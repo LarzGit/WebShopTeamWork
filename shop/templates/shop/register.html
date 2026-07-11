@@ -1,0 +1,96 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}MegaMart — Register{% endblock %}
+{% block description %}Create your MegaMart account.{% endblock %}
+
+{% block content %}
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+{% include 'shop/includes/category_menu.html' %}
+
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-card">
+
+            <h1>Create Account</h1>
+            <p class="auth-subtitle">
+                Register to start shopping with MegaMart
+            </p>
+
+            <!-- Общая ошибка -->
+            <div class="alert alert-danger d-none" id="register-errors">
+                Email already exists or form contains errors.
+            </div>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label" for="username">
+                        Login
+                    </label>
+
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter login">
+
+                    <div class="invalid-feedback">
+                        Please enter your login.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="email">
+                        Email
+                    </label>
+
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+
+                    <div class="invalid-feedback">
+                        Please enter a valid email.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="password1">
+                        Password
+                    </label>
+
+                    <input type="password" class="form-control" id="password1" name="password1"
+                        placeholder="Enter password">
+
+                    <div class="invalid-feedback">
+                        Please enter your password.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="password2">
+                        Confirm password
+                    </label>
+
+                    <input type="password" class="form-control" id="password2" name="password2"
+                        placeholder="Confirm password">
+
+                    <div class="invalid-feedback">
+                        Passwords do not match.
+                    </div>
+                </div>
+
+                <button class="auth-btn" type="submit">
+                    Register
+                </button>
+
+            </form>
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="{% url 'shop_login' %}">
+                    Login
+                </a>
+            </p>
+
+        </div>
+    </div>
+</section>
+
+{% include 'shop/includes/footer.html' %}
+{% endblock %}

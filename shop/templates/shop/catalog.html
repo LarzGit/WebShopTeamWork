@@ -1,0 +1,196 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}MegaMart — Каталог{% endblock %}
+{% block description %}Каталог товарів MegaMart із пошуком, фільтрами та сортуванням.{% endblock %}
+
+{% block content %}
+
+{% include 'shop/includes/topbar.html' %}
+{% include 'shop/includes/navbar.html' %}
+{% include 'shop/includes/category_menu.html' %}
+
+<section class="catalog-section">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+
+                <form method="get" class="mb-4">
+
+                    {% if query %}
+                    <input type="hidden" name="q" value="{{ query }}">
+                    {% endif %}
+
+                    <label class="form-label">Категорія</label>
+                    <select name="category" class="form-select mb-3" onchange="this.form.submit()">
+                        <option value="">Усі</option>
+
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+
+                    <label class="form-label">Ціна, ₴ (від / до)</label>
+
+                    <div class="d-flex gap-2 mb-3">
+                        <input type="number" name="min_price" value="{{ min_price }}" class="form-control"
+                            placeholder="від">
+
+                        <input type="number" name="max_price" value="{{ max_price }}" class="form-control"
+                            placeholder="до">
+                    </div>
+
+                    <label class="form-label">Мінімальний рейтинг</label>
+
+                    <select name="min_rating" class="form-select mb-3">
+
+                        <option value="">Будь-який</option>
+
+                        {% for r in "12345" %}
+                        <option value="{{ r }}" {% if min_rating == r %}selected{% endif %}>
+                            від {{ r }} ★
+                        </option>
+                        {% endfor %}
+
+                    </select>
+
+                    <label class="form-label">Наявність</label>
+
+                    <select name="in_stock" class="form-select mb-3">
+
+                        <option value="">Будь-яка</option>
+
+                        <option value="true" {% if in_stock == "true" %}selected{% endif %}>
+                            В наявності
+                        </option>
+
+                        <option value="false" {% if in_stock == "false" %}selected{% endif %}>
+                            Немає в наявності
+                        </option>
+
+                    </select>
+
+                    <label class="form-label">Сортування</label>
+
+                    <select name="ordering" class="form-select mb-3">
+
+                        <option value="-created_at" {% if ordering == "-created_at" %}selected{% endif %}>
+                            Спочатку нові
+                        </option>
+
+                        <option value="price" {% if ordering == "price" %}selected{% endif %}>
+                            Ціна: зростання
+                        </option>
+
+                        <option value="-price" {% if ordering == "-price" %}selected{% endif %}>
+                            Ціна: спадання
+                        </option>
+
+                        <option value="name" {% if ordering == "name" %}selected{% endif %}>
+                            Назва: А-Я
+                        </option>
+
+                        <option value="-name" {% if ordering == "-name" %}selected{% endif %}>
+                            Назва: Я-А
+                        </option>
+
+                        <option value="-avg_rating" {% if ordering == "-avg_rating" %}selected{% endif %}>
+                            За рейтингом
+                        </option>
+
+                    </select>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Застосувати
+                    </button>
+
+                    <a href="{% url 'catalog' %}" class="btn btn-link w-100 text-center">
+                        Скинути фільтри
+                    </a>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-9">
+
+                <div class="section-heading">
+                    <h2>
+                        Товари
+                        {% if query %}
+                        за запитом «{{ query }}»
+                        {% endif %}
+                    </h2>
+                </div>
+
+                {% if products %}
+
+                <div class="products-grid">
+
+                    {% for product in products %}
+                    {% include 'shop/includes/product_card.html' %}
+                    {% endfor %}
+
+                </div>
+
+                {% if page_obj.paginator.num_pages > 1 %}
+
+                <nav class="mt-4">
+
+                    <ul class="pagination">
+
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="?page={{ page_obj.previous_page_number }}&q={{ query }}&category={{ selected_category }}&ordering={{ ordering }}">
+                                «
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+
+                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                            <a class="page-link"
+                                href="?page={{ num }}&q={{ query }}&category={{ selected_category }}&ordering={{ ordering }}">
+                                {{ num }}
+                            </a>
+                        </li>
+
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                                href="?page={{ page_obj.next_page_number }}&q={{ query }}&category={{ selected_category }}&ordering={{ ordering }}">
+                                »
+                            </a>
+                        </li>
+                        {% endif %}
+
+                    </ul>
+
+                </nav>
+
+                {% endif %}
+
+                {% else %}
+
+                <div class="empty-products">
+                    Нічого не знайдено.
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% include 'shop/includes/footer.html' %}
+
+{% endblock %}

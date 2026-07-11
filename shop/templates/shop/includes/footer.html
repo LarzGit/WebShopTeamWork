@@ -1,0 +1,39 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>MegaMart</h2>
+                <h4>Зв'язатися з нами</h4>
+                <p><i class="bi bi-whatsapp"></i> WhatsApp<br><span>+380 44 123 4567</span></p>
+                <p><i class="bi bi-telephone"></i> Телефон<br><span>+380 44 123 4567</span></p>
+                <h4>Завантажити застосунок</h4>
+                <div class="app-buttons">
+                    <div class="app-btn">App Store</div>
+                    <div class="app-btn">Google Play</div>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Популярні категорії</h3>
+                <ul>
+                    {% for cat in nav_categories %}
+                    <li><a href="{% url 'catalog' %}?category={{ cat.id }}">{{ cat.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Обслуговування клієнтів</h3>
+                <ul>
+                    <li>Про нас</li>
+                    <li>Умови користування</li>
+                    <li>Питання та відповіді</li>
+                    <li>Політика конфіденційності</li>
+                    <li>Політика повернення</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">© 2026 Усі права захищено. MegaMart.</div>
+    </div>
+</footer>
